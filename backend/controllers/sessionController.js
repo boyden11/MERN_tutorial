@@ -58,10 +58,10 @@ const getSessionById = asyncHandler(async (req, res) => {
 
 const deleteSession = asyncHandler(async (req, res) => {
   const session = await Session.findById(req.params.id);
-  // if (session.user.toString() !== req.user._id.toString()) {
-  //   res.status(401);
-  //   throw new Error("You cannot perform this action");
-  // }
+  if (session.user.toString() !== req.user._id.toString()) {
+    res.status(401);
+    throw new Error("You cannot perform this action");
+  }
   if (session) {
     await session.remove();
     res.json({ message: "Session removed" });
@@ -74,9 +74,15 @@ const getSessions = asyncHandler(async (req, res) => {
 });
 
 const updateSession = asyncHandler(async (req, res) => {
-  const { activity, date, startTime, endTime, venue, status } = req.body;
-
+  
   const session = await Session.findById(req.params.id);
+
+  if (session.user.toString() !== req.user._id.toString()) {
+    res.status(401);
+    throw new Error("You cannot perform this action");
+  }
+
+  const { activity, date, startTime, endTime, venue, status } = req.body;
 
   if (session) {
     session.activity = activity;
@@ -85,8 +91,6 @@ const updateSession = asyncHandler(async (req, res) => {
     session.endTime = endTime;
     session.venue = venue;
     session.status = status;
-
-
 
     const updatedSession = await session.save();
     res.json(updateSession);

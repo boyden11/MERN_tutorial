@@ -1,40 +1,44 @@
 const mongoose = require("mongoose");
-// const Session = require("./session");
-// const dayjs = require('dayjs')
+const Session = require("./sessionModel");
+
 
 const projectSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      trim: true,
-      required: true,
+      trim: true
+    },
+    programmes:{
+      type: Array,
+      default: [{
+        works: [{
+          title:"Symphony no 1",
+          composer: "Beethoven",
+          duration: 25
+        }]
+      }]
     },
     soloists: {
       type: Array,
-      required: true,
       default: []
     },
     seriesTags:{
         type: Array,
-        required: true,
         default: []
     },
     activityTags:{
         type: Array,
-        required: true,
+  
         default: []
     },
     startDate: {
-      type: Number,
-      default: 4796668800000,
+      type: Number
     },
     endDate: {
-      type: Number,
-      default: 4796668800001,
+      type: Number
     },
     projectManager: {
         type: String,
-        required: true,
         default: "No project manager allocated"
     },
     status: {
@@ -43,7 +47,7 @@ const projectSchema = new mongoose.Schema(
     },
     notes: {
         type: Array,
-        required: true,
+  
         default: []
     },
     description: {
@@ -51,7 +55,7 @@ const projectSchema = new mongoose.Schema(
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+
       ref: "User",
     },
   },
@@ -77,12 +81,12 @@ const projectSchema = new mongoose.Schema(
 // //         return this.sessions[0].date
 // //     })
 
-// projectSchema.pre('findOneAndDelete', async function (next){
-//     const project = this
-//     const id = project._conditions._id
-//     await Session.deleteMany({project:id})
-//     next()
-// })
+projectSchema.pre('remove', async function (next){
+    const project = this
+    const id = project._id
+    await Session.deleteMany({project:id})
+    next()
+})
 
 const Project = mongoose.model("Project", projectSchema);
 module.exports = Project;
