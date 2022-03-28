@@ -11,11 +11,7 @@ const projectSchema = new mongoose.Schema(
     programmes:{
       type: Array,
       default: [{
-        works: [{
-          title:"Symphony no 1",
-          composer: "Beethoven",
-          duration: 25
-        }]
+        works: []
       }]
     },
     soloists: {
@@ -43,7 +39,7 @@ const projectSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      default: "planning",
+      default: 'light pencil',
     },
     notes: {
         type: Array,
